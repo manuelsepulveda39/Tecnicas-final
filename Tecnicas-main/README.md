@@ -11,11 +11,12 @@ nombre-proyecto/
 │       │           ├── model/
 │       │           │   └── Usuario.java
 │       │           ├── servlets/
-│       │           │   └── PruebaServlet.java
+│       │           │   └── RegistrarseServlet.java
 │       │           └── utils/
 │       │               └── ClaseUtil.java
 │       └── webapp/
 │           ├── WEB-INF/
+│           ├── assets/
 │           └── index.jsp
 ├── target/
 ├── .gitignore
@@ -80,71 +81,3 @@ mvn clean install
 > [!WARNING]
 > Si tienes problemas con la versión de la dependencia `jstl` te recomiendo esta solución en [StackOverflow](https://stackoverflow.com/questions/4928271) 
 
-## **Querys SQL** 📜
-Las consultas SQL se usan para comunicar el back con la base de datos. Para ello te recomiendo revisar el archivo [UsuarioDAO](/src/main/java/com/udea/dao/UsuarioDAO.java) y te fijes en las variables de tipo `private static final String`
-
-### Para crear una tabla en tu base de datos 📄
-**Debes cambiar los nombres de la columna con tu lógica.**
-```sql
-CREATE TABLE cliente (
-    cedula INT PRIMARY KEY,
-    nombre VARCHAR(50),
-    apellido VARCHAR(50),
-    email VARCHAR(100),
-);
-
-CREATE TABLE cuenta (
-    id_cuenta INT PRIMARY KEY,
-    id_cliente INT,
-    saldo INT NOT NULL,
-    FOREIGN KEY (id_cliente) REFERENCES cliente(cedula)
-);
-```
-
-### Insertar registros en las tablas 📥
-```sql
-INSERT INTO cliente (cedula, nombre, apellido, email) 
-VALUES (1020, 'Esteban', 'Cossio', 'estebancossio@udea.com');
-
-INSERT INTO cuenta (id_cuenta, id_cliente, saldo) 
-VALUES (1, 1020, 1000);
-```
-
-### Seleccionar datos de las tablas 🫳
-```sql
-SELECT * FROM cliente;
-SELECT * FROM cuenta;
-```
-
-Un cliente en especifico
-```sql
-SELECT cu.numero_cuenta, cu.saldo , c.nombre
-FROM cuenta cu
-INNER JOIN cliente cl ON cu.id_cliente = cl.cedula
-WHERE cl.cedula = 1;
-```
-
-### Actualizar datos 📝
-```sql
-UPDATE cliente 
-SET email = 'estebancossio_updated@udea.com', nombre = 'Carlos' 
-WHERE cedula = 1;
-```
-
-### Eliminar datos ❌
-```sql
-DELETE FROM cuenta
-WHERE id_cuenta = 1;
-```
-
-### Consulta avanzada 🤓
-Quiero obtener el saldo de un cliente:
-```sql
-SELECT cl.nombre, cl.apellido, cu.saldo 
-FROM cliente cl
-INNER JOIN cuenta cu ON cl.cedula = cu.id_cliente
-WHERE cl.cedula = 1;
-```
-
-> [!NOTE]
-> Si quieres profundizar en consultas SQL, te recomiendo esta [tabla de querys](https://learnsql.com/blog/sql-basics-cheat-sheet/sql-basics-cheat-sheet-a3.pdf)
